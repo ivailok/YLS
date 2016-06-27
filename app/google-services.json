@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1093764770524",
+    "project_id": "api-project-1093764770524"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093764770524:android:9ee6ffe2b195d0df",
+        "android_client_info": {
+          "package_name": "ivailok.yls"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1093764770524-l3a0h3tgiuopg7eedeffleie4rohmfa9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ivailok.yls",
+            "certificate_hash": "AB2FE024BB95A87E107B00A732ACAF09591822EE"
+          }
+        },
+        {
+          "client_id": "1093764770524-gmqi97003g5v7iipdr1jmlulopr2p4gi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPYa8nYO5qtay4Nq8YbfDqzA2fXBgrRso"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
