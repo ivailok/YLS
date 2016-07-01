@@ -2,9 +2,6 @@ package ivailok.yls.models;
 
 import java.util.ArrayList;
 
-/**
- * Created by ivail on 7.6.2016 г..
- */
 public class MyPlaylists {
     private String nextPageToken;
     private ArrayList<Playlist> items;
@@ -18,7 +15,7 @@ public class MyPlaylists {
     }
 
     public ArrayList<Playlist> getItems() {
-        return this.getItems();
+        return this.items;
     }
 
     public void setItems(ArrayList<Playlist> items) {

@@ -1,35 +1,30 @@
 package ivailok.yls;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import ivailok.yls.models.Credentials;
-import ivailok.yls.models.MyPlaylists;
+import ivailok.yls.tasks.MyPlaylistsTask;
+import ivailok.yls.utils.CustomBaseAdapter;
+import ivailok.yls.utils.RowItem;
 import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/**
- * Created by ivail on 8.6.2016 г..
- */
-public class MyPlaylistsActivity extends BaseActivity {
+public class MyPlaylistsActivity extends BaseActivity implements AdapterView.OnItemClickListener {
     private TextView signedUserTextView;
+
+    private ListView listView;
+    private List<RowItem> rowItems;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,6 +36,12 @@ public class MyPlaylistsActivity extends BaseActivity {
         sharedPrefs = this.getSharedPreferences(
                 getString(R.string.app_name), Context.MODE_PRIVATE);
         signedUserTextView.setText(sharedPrefs.getString(getString(R.string.username), "Anonymous"));
+
+        rowItems = new ArrayList<RowItem>();
+        listView = (ListView) findViewById(R.id.list);
+        CustomBaseAdapter adapter = new CustomBaseAdapter(this, rowItems);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class MyPlaylistsActivity extends BaseActivity {
     public void onResponse(Call call, Response response) throws IOException {
         Credentials cred = gsonLowercaseWithUnderscores.fromJson(response.body().string(), Credentials.class);
 
-        final Request request = new Request.Builder()
+        /*final Request request = new Request.Builder()
                 .url("https://www.googleapis.com/youtube/v3/playlists?" +
                         "part=snippet,contentDetails&mine=true&access_token=" + cred.getAccessToken())
                 .get()
@@ -73,8 +74,29 @@ public class MyPlaylistsActivity extends BaseActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 MyPlaylists myPlaylists = gsonCamelCase.fromJson(response.body().string(), MyPlaylists.class);
-                int a = 4;
+
+                ArrayList<Playlist> items = myPlaylists.getItems();
+                for (int i = 0; i < items.size(); i++) {
+                    RowItem item = new RowItem(items.get(i).getSnippet().getThumbnails().getMedium().getUrl(),
+                            items.get(i).getSnippet().getTitle(), items.get(i).getContentDetails().getItemCount());
+                    rowItems.add(item);
+                }
+
+                MyPlaylistsActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((BaseAdapter)listView.getAdapter()).notifyDataSetChanged();
+                    }
+                });
             }
-        });
+        });*/
+
+        MyPlaylistsTask task = new MyPlaylistsTask(httpClient, gsonCamelCase, MyPlaylistsActivity.this);
+        task.execute(listView, rowItems, cred.getAccessToken(), null);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
 }
