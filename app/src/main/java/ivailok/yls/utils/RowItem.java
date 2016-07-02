@@ -3,12 +3,14 @@ package ivailok.yls.utils;
 public class RowItem {
     private String imageUrl;
     private String title;
-    private int count;
+    private String desc;
+    private String id;
 
-    public RowItem(String imageUrl, String title, int count) {
+    public RowItem(String imageUrl, String title, String desc, String id) {
         this.imageUrl = imageUrl;
         this.title = title;
-        this.count = count;
+        this.desc = desc;
+        this.id = id;
     }
 
     public String getImageUrl() {
@@ -19,12 +21,12 @@ public class RowItem {
         this.imageUrl = imageUrl;
     }
 
-    public int getCount() {
-        return count;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     public String getTitle() {
@@ -35,8 +37,16 @@ public class RowItem {
         this.title = title;
     }
 
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
-        return title + "\n" + count;
+        return title + "\n" + desc;
     }
 }

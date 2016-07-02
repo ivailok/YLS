@@ -16,4 +16,7 @@
     <string name="username">Username</string>
     <string name="grant_type">grant_type</string>
 
+    <string name="private_video">Private video</string>
+    <string name="deleted_video">Deleted video</string>
+
 </resources>

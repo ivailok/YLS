@@ -57,7 +57,8 @@ public class MyPlaylistsTask {
                 ArrayList<Playlist> items = myPlaylists.getItems();
                 for (int i = 0; i < items.size(); i++) {
                     RowItem item = new RowItem(items.get(i).getSnippet().getThumbnails().getMedium().getUrl(),
-                            items.get(i).getSnippet().getTitle(), items.get(i).getContentDetails().getItemCount());
+                            items.get(i).getSnippet().getTitle(), String.valueOf(items.get(i).getContentDetails().getItemCount()),
+                            items.get(i).getId());
                     rowItems.add(item);
                 }
 

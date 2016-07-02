@@ -1,12 +1,10 @@
 package ivailok.yls.models;
 
-/**
- * Created by ivail on 7.6.2016 г..
- */
 public class Snippet {
     private String title;
     private String description;
     private Thumbnails thumbnails;
+    private int position;
 
     public String getTitle() {
         return this.title;
@@ -30,5 +28,13 @@ public class Snippet {
 
     public void setThumbnails(Thumbnails thumbnails) {
         this.thumbnails = thumbnails;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

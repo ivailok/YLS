@@ -1,6 +1,7 @@
 package ivailok.yls;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -97,6 +98,9 @@ public class MyPlaylistsActivity extends BaseActivity implements AdapterView.OnI
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        String playlistId = rowItems.get(position).getId();
+        Intent myIntent = new Intent(MyPlaylistsActivity.this, PlaylistActivity.class);
+        myIntent.putExtra("PlaylistId", playlistId);
+        MyPlaylistsActivity.this.startActivity(myIntent);
     }
 }

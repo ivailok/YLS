@@ -51,7 +51,7 @@ public class CustomBaseAdapter extends BaseAdapter {
         RowItem rowItem = (RowItem) getItem(position);
 
         AQuery aq = new AQuery(convertView);
-        aq.id(holder.txtDesc).text(String.valueOf(rowItem.getCount()));
+        aq.id(holder.txtDesc).text(rowItem.getDesc());
         aq.id(holder.txtTitle).text(rowItem.getTitle());
         aq.id(holder.imageView).image(rowItem.getImageUrl(), true, true, 0, 0, null, AQuery.FADE_IN_NETWORK, 1.0f);
 
