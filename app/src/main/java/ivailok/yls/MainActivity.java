@@ -18,6 +18,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -46,8 +47,9 @@ public class MainActivity extends AppCompatActivity implements
     private static final int RC_SIGN_IN = 9001;
 
     private GoogleApiClient mGoogleApiClient;
-    private TextView mStatusTextView;
     private ProgressDialog mProgressDialog;
+    private SignInButton mSignInButton;
+    private TextView mWelcomeMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +57,11 @@ public class MainActivity extends AppCompatActivity implements
 
         setContentView(R.layout.activity_main);
 
-        mStatusTextView = (TextView) findViewById(R.id.status);
-
         mGoogleApiClient = initSignIn();
 
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
+        mWelcomeMessage = (TextView) findViewById(R.id.welcome_message);
+        mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        mSignInButton.setOnClickListener(this);
     }
 
     private GoogleApiClient initSignIn() {
@@ -90,9 +92,11 @@ public class MainActivity extends AppCompatActivity implements
 
     private void updateUI(boolean signedIn) {
         if (signedIn) {
-            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+            mSignInButton.setVisibility(View.GONE);
+            mWelcomeMessage.setVisibility(View.GONE);
         } else {
-            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
+            mSignInButton.setVisibility(View.VISIBLE);
+            mWelcomeMessage.setVisibility(View.VISIBLE);
         }
     }
 
@@ -159,9 +163,6 @@ public class MainActivity extends AppCompatActivity implements
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             final GoogleSignInAccount acct = result.getSignInAccount();
-            mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
-
-            showProgressDialog();
 
             OkHttpClient httpClient = new OkHttpClient();
 
@@ -224,6 +225,7 @@ public class MainActivity extends AppCompatActivity implements
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            showProgressDialog();
             handleSignInResult(result);
         }
     }

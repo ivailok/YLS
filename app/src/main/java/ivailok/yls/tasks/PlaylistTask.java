@@ -69,33 +69,34 @@ public class PlaylistTask {
             public void onResponse(Call call, Response response) throws IOException {
                 PlaylistResponse playlistResponse = gsonCamelCase.fromJson(response.body().string(), PlaylistResponse.class);
 
-                ArrayList<PlaylistVideo> items = playlistResponse.getItems();
-
-                for (int i = 0; i < items.size(); i++) {
-                    if (localData.size() < playlistNum) {
-                        localData.add(items.get(i).getSnippet().getTitle());
-                    }
-
-                    RowItem item;
-                    //Log.d("YLS", items.get(i).getSnippet().getTitle());
-                    if (items.get(i).getSnippet().getTitle().equals(activity.getString(R.string.private_video))) {
-                        item = new RowItem(null,
-                                String.valueOf(playlistNum) + ". " + localData.get(playlistNum - 1), "private", null);
-                    } else if (items.get(i).getSnippet().getTitle().equals(activity.getString(R.string.deleted_video))) {
-                        item = new RowItem(null,
-                                String.valueOf(playlistNum) + ". " + localData.get(playlistNum - 1), "deleted", null);
-                    } else {
-                        item = new RowItem(items.get(i).getSnippet().getThumbnails().getMedium().getUrl(),
-                                String.valueOf(playlistNum) + ". " + items.get(i).getSnippet().getTitle(), "ok", null);
-                    }
-
-                    rowItems.add(item);
-                    playlistNum++;
-                }
+                final ArrayList<PlaylistVideo> items = playlistResponse.getItems();
 
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        for (int i = 0; i < items.size(); i++) {
+                            if (localData.size() < playlistNum) {
+                                localData.add(items.get(i).getSnippet().getTitle());
+                            }
+
+                            RowItem item;
+                            //Log.d("YLS", items.get(i).getSnippet().getTitle());
+                            if (items.get(i).getSnippet().getTitle().equals(activity.getString(R.string.private_video))) {
+                                item = new RowItem(null,
+                                        String.valueOf(playlistNum) + ". " + localData.get(playlistNum - 1), "private", null);
+                            } else if (items.get(i).getSnippet().getTitle().equals(activity.getString(R.string.deleted_video))) {
+                                item = new RowItem(null,
+                                        String.valueOf(playlistNum) + ". " + localData.get(playlistNum - 1), "deleted", null);
+                            } else {
+                                item = new RowItem(items.get(i).getSnippet().getThumbnails().getMedium().getUrl(),
+                                        String.valueOf(playlistNum) + ". " + items.get(i).getSnippet().getTitle(), "ok", null);
+                                localData.set(playlistNum - 1, items.get(i).getSnippet().getTitle());
+                            }
+
+                            rowItems.add(item);
+                            playlistNum++;
+                        }
+
                         ((BaseAdapter)listView.getAdapter()).notifyDataSetChanged();
                     }
                 });

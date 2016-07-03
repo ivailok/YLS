@@ -53,18 +53,18 @@ public class MyPlaylistsTask {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 MyPlaylists myPlaylists = gsonCamelCase.fromJson(response.body().string(), MyPlaylists.class);
-
-                ArrayList<Playlist> items = myPlaylists.getItems();
-                for (int i = 0; i < items.size(); i++) {
-                    RowItem item = new RowItem(items.get(i).getSnippet().getThumbnails().getMedium().getUrl(),
-                            items.get(i).getSnippet().getTitle(), String.valueOf(items.get(i).getContentDetails().getItemCount()),
-                            items.get(i).getId());
-                    rowItems.add(item);
-                }
+                final ArrayList<Playlist> items = myPlaylists.getItems();
 
                 activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        for (int i = 0; i < items.size(); i++) {
+                            RowItem item = new RowItem(items.get(i).getSnippet().getThumbnails().getMedium().getUrl(),
+                                    items.get(i).getSnippet().getTitle(), String.valueOf(items.get(i).getContentDetails().getItemCount()),
+                                    items.get(i).getId());
+                            rowItems.add(item);
+                        }
+
                         ((BaseAdapter)listView.getAdapter()).notifyDataSetChanged();
                     }
                 });

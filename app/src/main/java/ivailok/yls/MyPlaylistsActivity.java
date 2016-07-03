@@ -2,13 +2,22 @@ package ivailok.yls;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,6 +52,38 @@ public class MyPlaylistsActivity extends BaseActivity implements AdapterView.OnI
         CustomBaseAdapter adapter = new CustomBaseAdapter(this, rowItems);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Take appropriate action for each action item click
+        switch (item.getItemId()) {
+            case R.id.action_sign_out:
+
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                editor.remove(getString(R.string.username));
+                editor.remove(getString(R.string.auth_code));
+                editor.remove(getString(R.string.id_token));
+                editor.remove(getString(R.string.access_token));
+                editor.remove(getString(R.string.refresh_token));
+                editor.remove(getString(R.string.expires_in));
+                editor.apply();
+
+                Intent myIntent = new Intent(MyPlaylistsActivity.this, MainActivity.class);
+                MyPlaylistsActivity.this.finish();
+                MyPlaylistsActivity.this.startActivity(myIntent);
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
