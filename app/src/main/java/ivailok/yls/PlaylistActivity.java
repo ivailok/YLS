@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ivailok.yls.models.Credentials;
-import ivailok.yls.tasks.MyPlaylistsTask;
 import ivailok.yls.tasks.PlaylistTask;
 import ivailok.yls.utils.CustomBaseAdapter;
 import ivailok.yls.utils.RowItem;
@@ -23,7 +22,9 @@ import okhttp3.Response;
 
 public class PlaylistActivity extends BaseActivity implements AdapterView.OnItemClickListener {
     private String playlistId;
+    private String playlistTitle;
 
+    private TextView title;
     private ListView listView;
     private List<RowItem> rowItems;
 
@@ -33,10 +34,14 @@ public class PlaylistActivity extends BaseActivity implements AdapterView.OnItem
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            this.playlistId = extras.getString("PlaylistId");
+            this.playlistId = extras.getString(getString(R.string.playlist_id));
+            this.playlistTitle = extras.getString(getString(R.string.playlist_title));
         }
 
-        setContentView(R.layout.activity_my_playlists);
+        setContentView(R.layout.activity_playlists);
+
+        title = (TextView) findViewById(R.id.title);
+        title.setText(playlistTitle);
 
         sharedPrefs = this.getSharedPreferences(
                 getString(R.string.app_name), Context.MODE_PRIVATE);

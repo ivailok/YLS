@@ -14,11 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +35,8 @@ public class MyPlaylistsActivity extends BaseActivity implements AdapterView.OnI
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_my_playlists);
-        signedUserTextView = (TextView) findViewById(R.id.signed_user);
+        setContentView(R.layout.activity_playlists);
+        signedUserTextView = (TextView) findViewById(R.id.title);
 
         sharedPrefs = this.getSharedPreferences(
                 getString(R.string.app_name), Context.MODE_PRIVATE);
@@ -101,38 +96,6 @@ public class MyPlaylistsActivity extends BaseActivity implements AdapterView.OnI
     @Override
     public void onResponse(Call call, Response response) throws IOException {
         Credentials cred = gsonLowercaseWithUnderscores.fromJson(response.body().string(), Credentials.class);
-
-        /*final Request request = new Request.Builder()
-                .url("https://www.googleapis.com/youtube/v3/playlists?" +
-                        "part=snippet,contentDetails&mine=true&access_token=" + cred.getAccessToken())
-                .get()
-                .build();
-        httpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d(getString(R.string.app_name), "Could not retrive playlists.");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                MyPlaylists myPlaylists = gsonCamelCase.fromJson(response.body().string(), MyPlaylists.class);
-
-                ArrayList<Playlist> items = myPlaylists.getItems();
-                for (int i = 0; i < items.size(); i++) {
-                    RowItem item = new RowItem(items.get(i).getSnippet().getThumbnails().getMedium().getUrl(),
-                            items.get(i).getSnippet().getTitle(), items.get(i).getContentDetails().getItemCount());
-                    rowItems.add(item);
-                }
-
-                MyPlaylistsActivity.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ((BaseAdapter)listView.getAdapter()).notifyDataSetChanged();
-                    }
-                });
-            }
-        });*/
-
         MyPlaylistsTask task = new MyPlaylistsTask(httpClient, gsonCamelCase, MyPlaylistsActivity.this);
         task.execute(listView, rowItems, cred.getAccessToken(), null);
     }
@@ -140,8 +103,10 @@ public class MyPlaylistsActivity extends BaseActivity implements AdapterView.OnI
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String playlistId = rowItems.get(position).getId();
+        String playlistTitle = rowItems.get(position).getTitle();
         Intent myIntent = new Intent(MyPlaylistsActivity.this, PlaylistActivity.class);
-        myIntent.putExtra("PlaylistId", playlistId);
+        myIntent.putExtra(getString(R.string.playlist_id), playlistId);
+        myIntent.putExtra(getString(R.string.playlist_title), playlistTitle);
         MyPlaylistsActivity.this.startActivity(myIntent);
     }
 }

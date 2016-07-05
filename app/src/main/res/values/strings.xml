@@ -20,5 +20,7 @@
     <string name="deleted_video">Deleted video</string>
     <string name="action_sign_out">Sign out</string>
     <string name="welcome_message">Please sign in with your Google account to use our services.</string>
+    <string name="playlist_title">PlaylistTitle</string>
+    <string name="playlist_id">PlaylistId</string>
 
 </resources>
